@@ -472,9 +472,27 @@ function review(){
     chat.scrollTop=chat.scrollHeight;
   },1100);
 }
+var TICKET_LOG_URL="https://script.google.com/macros/s/AKfycbwuntA1FJijxVPSTALZlVUpEKiliFkbwKNJhUucDElk0Cadr_V9jHsgmISLb-s2H_RCPA/exec";
+function logTicket(ticketId){
+  try{
+    fetch(TICKET_LOG_URL,{
+      method:"POST",
+      body:JSON.stringify({
+        ticketId:ticketId,
+        mobile:data.mobile||"",
+        language:lang,
+        asset:data.asset||"",
+        issue:data.issue||"",
+        description:data.description||"",
+        media:data.media||""
+      })
+    }).catch(function(){});
+  }catch(e){}
+}
 function submit(){
   const z=t(), id="TKT-"+new Date().getFullYear()+String(Math.floor(100000+Math.random()*900000));
   add(z.yes,"user");
+  logTicket(id);
   botReply(z.success+"\n"+z.ticket+"\n"+id+"\n\n"+z.follow,[],1000);
   state="done";
   const b=document.createElement("button");b.className="restart";b.textContent=z.retry;
